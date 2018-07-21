@@ -1,0 +1,39 @@
+@import "bootstrap";
+
+
+body{
+  margin: 0px;
+}
+
+.navbar{
+  background-color: #173e43;
+  color: #F16745;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 5px;
+  height: 50px;
+}
+
+#logo {
+  position: absolute;
+  left: 20px;
+  text-align: center;
+  margin: auto;
+  float: left;
+  font-size: 2.0em;
+  color:  #fae596;
+  text-transform: uppercase;
+  letter-spacing: -5px;
+  font-weight: normal;
+}
+
+#menu-items {
+  position: absolute;
+  text-align: center;
+  margin: auto;
+  float: right;
+  font-size: 1.0em;
+  color:  #fae596;
+  font-weight: normal;
+}
