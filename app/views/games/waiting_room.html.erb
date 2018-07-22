@@ -1,1 +1,1 @@
-<%= "Waiting Room For #{@game.name}" %>
+<%= react_component("WaitingRoom", { game: @game, current_player: @player, players: @players }) %>
