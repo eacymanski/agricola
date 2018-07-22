@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  root 'games#lobby'
+  resources :games do
+    get 'waiting_room', on: :member
+    get 'lobby', on: :collection
+  end
 end
