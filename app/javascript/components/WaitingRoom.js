@@ -2,9 +2,13 @@ import React from "react"
 import PropTypes from "prop-types"
 class WaitingRoom extends React.Component {
 
-  state = {
-    current_player:  this.props.current_player,
-    players:         this.props.players
+  constructor(props) {
+    super();
+    this.state = {
+      currentPlayer:  props.currentPlayer,
+      players:        props.players,
+      editingName:    false
+    }
   }
 
   componentDidMount() {
@@ -36,20 +40,44 @@ class WaitingRoom extends React.Component {
     });
   }
 
+  toggleEditName = (player) => {
+    this.setState({editingName: !this.state.editingName});
+
+    var newName = $('#new-name').val();
+    if(newName && newName!=this.state.currentPlayer.name) {
+      this.updatePlayerName(newName);
+    }
+  }
+
+  updatePlayerName(newName) {
+    console.log('updating player name:' + newName);
+    $.ajax({
+      url: '/players/'+this.state.currentPlayer.id,
+      dataType: 'JSON',
+      data: { player: { name: newName } },
+      type: 'PUT',
+      success: function(result) {
+        console.log('Name changed!');
+      }
+    });
+  }
+
   render () {
+    var currentPlayer = this.state.currentPlayer;
     return (
       <React.Fragment>
         <h1>Game: { this.props.game.name } </h1>
-        <h2>Welcome to the game { this.state.current_player.name }!</h2>
+        <h2>Welcome to the game { this.state.currentPlayer.name }!</h2>
         <h2>Players:</h2>
         <ul>
-        {this.state.players.map(function(player, index) {
+        {this.state.players.map((player, index) => {
             return(
                 <React.Fragment>
                 <li key= { index }>
-                {player.name}
+                { (((player.id==currentPlayer.id) && !this.state.editingName) || !(player.id==currentPlayer.id)) && player.name }
+                { (player.id==currentPlayer.id) && this.state.editingName && <input id='new-name' type='text' defaultValue={player.name} /> }
+                { (player.id==currentPlayer.id) && <button onClick={()=>this.toggleEditName(player)}>Change Name</button> }
                 </li>
-                <div key={index}>{ if(player.id==this.state.current_player.id){ <a>Change Me</a>} }</div>
                 </React.Fragment>
                 );
         })}
@@ -61,7 +89,7 @@ class WaitingRoom extends React.Component {
 
 WaitingRoom.propTypes = {
   game: PropTypes.object,
-  current_player: PropTypes.object,
+  currentPlayer: PropTypes.object,
   players: PropTypes.array
 };
 export default WaitingRoom

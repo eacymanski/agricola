@@ -5,4 +5,5 @@ Rails.application.routes.draw do
     get 'waiting_room', on: :member
     get 'lobby', on: :collection
   end
+  resources :players, only: [:update]
 end
